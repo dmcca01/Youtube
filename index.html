@@ -32,6 +32,7 @@
         }
 
         .container {
+            width: 100%;
             max-width: 500px;
             padding: 40px;
             border: 2px solid #ff0000;
@@ -39,6 +40,7 @@
             /* Angular, aggressive framing */
             clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.15);
+            box-sizing: border-box;
         }
 
         /* Rhythmic, hard-edged typography */
@@ -112,36 +114,36 @@
         <h1>Jemeker Hairston<br><span style="color: #ff0000; text-shadow: 2px 2px 0px #fff;">A Second Chance</span></h1>
         <p>The Untold Stories</p>
 
-        <!-- Button text updated per your request -->
-        <a href="youtube://www.youtube.com/@secondchancepod?sub_confirmation=1" id="open-link" class="btn">Open YouTube App</a>
+        <!-- Click-only Deep Link -->
+        <a href="#" id="open-link" class="btn">Open YouTube App</a>
         
         <div class="sub-text">Tap to open directly in the App</div>
     </div>
 
     <script>
-        window.onload = function() {
-            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            var linkEl = document.getElementById('open-link');
+        // Intelligent deep-linking attached ONLY to the user click event
+        document.getElementById('open-link').addEventListener('click', function(e) {
+            e.preventDefault(); // Stop standard default link behavior
             
-            // Base optimized URL that forces the subscription pop-up if opened in browser
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
             var targetUrl = "www.youtube.com/@secondchancepod?sub_confirmation=1";
             
             if (/android/i.test(userAgent)) {
-                // Android native intent structure to bypass browser step completely
-                linkEl.href = "intent://" + targetUrl + "#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=https://" + targetUrl + ";end";
+                // Android native system intent to force open the app on click
+                window.location.href = "intent://" + targetUrl + "#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=https://" + targetUrl + ";end";
             } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
-                // iOS deep link structure
-                linkEl.href = "youtube://" + targetUrl;
+                // iOS deep link URL scheme
+                window.location.href = "youtube://" + targetUrl;
                 
-                // Smart fallback: If they don't have the app installed, redirect them to the browser version after a short delay
+                // Fallback: If they don't have the YT app, open it in the web browser after 1 second
                 setTimeout(function() {
                     window.location.href = "https://" + targetUrl;
-                }, 1500);
+                }, 1000);
             } else {
-                // Desktop/Fallback link
-                linkEl.href = "https://" + targetUrl;
+                // Desktop or standard fallback browser link
+                window.location.href = "https://" + targetUrl;
             }
-        };
+        });
     </script>
 
 </body>
