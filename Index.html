@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Second Chance Podcast</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #aaaaaa;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+        .btn {
+            background-color: #ff0000;
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            transition: transform 0.1s ease;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Second Chance Podcast</h1>
+    <p>Tap below to open directly in the YouTube app</p>
+
+    <!-- The critical button that forces the app to open -->
+    <a href="youtube://www.youtube.com/@secondchancepod" id="open-link" class="btn">Open YouTube App</a>
+
+    <script>
+        // Intelligent fallback: If they are on Android, we can optimize the link further 
+        // to bypass the click step entirely using a native system intent.
+        window.onload = function() {
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            var linkEl = document.getElementById('open-link');
+            
+            if (/android/i.test(userAgent)) {
+                // Android can use a raw system intent link directly inside the button
+                linkEl.href = "intent://www.youtube.com/@secondchancepod#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=https://youtube.com/@secondchancepod;end";
+            }
+        };
+    </script>
+
+</body>
+</html>
