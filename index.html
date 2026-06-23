@@ -5,62 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jemeker Hairston | A Second Chance</title>
     <style>
+        /* Cinematic, high-contrast dark theme */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Impact', 'Arial Black', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #0f0f0f;
+            background-color: #0a0a0a;
             color: #ffffff;
             text-align: center;
             padding: 20px;
+            letter-spacing: 0.05em;
+            overflow: hidden;
         }
+
+        /* Subtle retro/cinematic background vignette */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, rgba(255,0,0,0.05) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 40px;
+            border: 2px solid #ff0000;
+            background-color: #111111;
+            /* Angular, aggressive framing */
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.15);
+        }
+
+        /* Rhythmic, hard-edged typography */
         h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1.1;
+            color: #ffffff;
+            text-shadow: 2px 2px 0px #ff0000;
         }
+
         p {
-            color: #aaaaaa;
-            margin-bottom: 30px;
-            font-size: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #cccccc;
+            margin-top: 0;
+            margin-bottom: 35px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
         }
+
+        /* Fully angular, high-energy CTA button */
         .btn {
+            display: inline-block;
             background-color: #ff0000;
             color: white;
             text-decoration: none;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-            transition: transform 0.1s ease;
+            padding: 16px 40px;
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            /* Complete rejection of bubbly or soft shapes */
+            border-radius: 0px; 
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+            box-shadow: -5px 5px 0px #ffffff;
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
+
+        /* Kinetic hover/active states */
+        .btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: -5px 5px 0px #ff0000;
+            transform: translate(3px, -3px);
+        }
+
         .btn:active {
-            transform: scale(0.98);
+            transform: translate(-1px, 1px);
+            box-shadow: -2px 2px 0px #ff0000;
+        }
+
+        .sub-text {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.75rem;
+            color: #666666;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Jemeker Hairston | A Second Chance</h1>
-    <p>For more untold stories visit below</p>
+    <div class="container">
+        <h1>Jemeker Hairston<br><span style="color: #ff0000; text-shadow: 2px 2px 0px #fff;">A Second Chance</span></h1>
+        <p>The Untold Stories</p>
 
-    <!-- The critical button that forces the app to open -->
-    <a href="youtube://www.youtube.com/@secondchancepod" id="open-link" class="btn">Open YouTube App</a>
+        <!-- Button text updated per your request -->
+        <a href="youtube://www.youtube.com/@secondchancepod?sub_confirmation=1" id="open-link" class="btn">Open YouTube App</a>
+        
+        <div class="sub-text">Tap to open directly in the App</div>
+    </div>
 
     <script>
-        // Intelligent fallback: If they are on Android, we can optimize the link further 
-        // to bypass the click step entirely using a native system intent.
         window.onload = function() {
             var userAgent = navigator.userAgent || navigator.vendor || window.opera;
             var linkEl = document.getElementById('open-link');
             
+            // Base optimized URL that forces the subscription pop-up if opened in browser
+            var targetUrl = "www.youtube.com/@secondchancepod?sub_confirmation=1";
+            
             if (/android/i.test(userAgent)) {
-                // Android can use a raw system intent link directly inside the button
-                linkEl.href = "intent://www.youtube.com/@secondchancepod#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=https://youtube.com/@secondchancepod;end";
+                // Android native intent structure to bypass browser step completely
+                linkEl.href = "intent://" + targetUrl + "#Intent;scheme=https;package=com.google.android.youtube;S.browser_fallback_url=https://" + targetUrl + ";end";
+            } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+                // iOS deep link structure
+                linkEl.href = "youtube://" + targetUrl;
+                
+                // Smart fallback: If they don't have the app installed, redirect them to the browser version after a short delay
+                setTimeout(function() {
+                    window.location.href = "https://" + targetUrl;
+                }, 1500);
+            } else {
+                // Desktop/Fallback link
+                linkEl.href = "https://" + targetUrl;
             }
         };
     </script>
